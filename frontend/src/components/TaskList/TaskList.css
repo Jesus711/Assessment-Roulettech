@@ -5,10 +5,15 @@
     align-items: center;
 }
 
+.task-count {
+    text-align: center;
+}
+
 .app-tasks-list {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
-    column-gap: 16px;
 }
 
 .empty-tasklist {

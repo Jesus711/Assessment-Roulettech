@@ -6,7 +6,8 @@ import "./TaskList.css"
 
 const TaskList = ({ endpoint }) => {
     const [tasksList, setTasksList] = useState([])
-
+    
+    
     const fetchProjectTasks = async () => {
       const response = await fetch(`api/${endpoint}`)
       if (response.ok){
@@ -31,15 +32,41 @@ const TaskList = ({ endpoint }) => {
     }, [endpoint])
 
 
+    const handleTaskDeletion = async (id) => {
+      let confirmation = confirm(`Are you sure you want to delete Task # ${id}`)
+      
+      if (confirmation) {
+        // Sernd delete request
+        const request = await fetch(`api/tasks/delete/${id}/`, {
+          method: "DELETE",
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        if(request.ok) {
+          setTasksList(tasksList.filter((task) => task.id != id))
+          alert("Task was successfully deleted")
+
+        }
+        else {
+          alert("Task was not deleted.")
+        }
+      }
+      else {
+          alert("Task was not deleted.")
+      }
+    }
+
   return (
     <div className="app-tasks">
 
       {tasksList && tasksList.length > 0 ? (
         <div className="app-tasks-display">
-          <h2>Tasks Count: {tasksList.length}</h2>
+          <h2 className="task-count">Tasks Count: {tasksList.length}</h2>
           <div className="app-tasks-list">
               {tasksList.map((task) => (
-                  <TaskItem key={task.title + task.description} task={task}/>
+                  <TaskItem key={task.title + task.id + task.description} task={task} endpoint={endpoint} handleDelete={handleTaskDeletion}/>
               ))}
           </div>
         </div>
