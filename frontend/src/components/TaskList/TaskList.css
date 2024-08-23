@@ -1,0 +1,28 @@
+.app-tasks {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-tasks-list {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 16px;
+}
+
+.empty-tasklist {
+    width: 900px;
+    border: 2px white dashed;
+    margin-top: 32px;
+}
+
+.empty-tasklist h2 {
+    text-align: center;
+    font-size: 48px;
+}
+.empty-tasklist p {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 500;
+}

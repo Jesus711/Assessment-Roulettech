@@ -1,0 +1,17 @@
+.app-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px #CCC solid;
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.app-header p {
+    margin: 0;
+    font-size: 24px;
+}

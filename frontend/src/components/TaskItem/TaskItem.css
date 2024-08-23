@@ -1,0 +1,11 @@
+.app-task-item {
+    background-color: rgb(196, 196, 87);
+    padding: 8px 12px;
+    border-radius: 24px;
+    width: 300px;
+    height: 300px;
+}
+
+.task-title, .task-desc {
+    color: #222;
+}

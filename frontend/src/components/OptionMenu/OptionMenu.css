@@ -1,0 +1,22 @@
+.app-option-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.app-option-title {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: right;
+    font-size: 28px;
+}
+
+.app-option-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
