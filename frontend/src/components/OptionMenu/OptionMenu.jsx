@@ -19,7 +19,7 @@ const OptionMenu = () => {
       <div className='app-option-buttons'>
         <Button handleClick={() => handleButtonClick(0)} text={"View Your Tasks"} />
         <Button handleClick={() => handleButtonClick(1)} text={"Create New Task"} />
-        <Button handleClick={() => handleButtonClick(2)} text={"View This Project's Task"} />
+        <Button handleClick={() => handleButtonClick(2)} text={"View This Project's Tasks"} />
       </div>
 
       {optionSelected === 0 ? (
