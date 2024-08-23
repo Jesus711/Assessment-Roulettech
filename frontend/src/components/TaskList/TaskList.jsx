@@ -22,7 +22,7 @@ const TaskList = ({ endpoint }) => {
         }
       }
       else{
-        alert(`Error Occurred when trying to retrieve tasks from api/${endpoint}`)
+        alert(`Error Occurred when trying to retrieve tasks from api/${endpoint}\nMake sure the backend is running.`)
         return;
       }
     }
@@ -74,7 +74,7 @@ const TaskList = ({ endpoint }) => {
         <div className="empty-tasklist">
           <h2>Welcome to the Task Keeper</h2>
           <p>Tasks will be displayed here. Looks like there are no tasks.</p>
-          <p>Navigate to the Create Task page to being creating your tasks</p>
+          <p>Navigate to the Create New Task page to begin creating your tasks</p>
         </div>
       )}
 
