@@ -1,109 +1,110 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect
-from django.urls import reverse
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 from .models import TaskItem
-import datetime
+
 
 # Create your views here.
 def task_list_view(request):
-    # tasks = TaskItem.objects.all()
-    
-    sample_tasks = { 
-        "Tasks" : [
-            {
-                "title": "Buy groceries", 
-                "description": "Milk, Bread, Eggs", 
-                #"completed_at": None
-            },
-            {
-                "title": "Finish project report", 
-                "description": "Complete the final draft and submit it", 
-                #"completed_at": datetime.datetime.now() - datetime.timedelta(days=2)
-            },
-            {
-                "title": "Call plumber", 
-                "description": "Fix the leaking sink", 
-                #"completed_at": None
-            },
-            {
-                "title": "Book flight tickets", 
-                "description": "Round trip to New York", 
-                #"completed_at": datetime.datetime.now() - datetime.timedelta(days=1)
-            },
-            {
-                "title": "Read a book", 
-                "description": "Read 'Django for Beginners'", 
-                #"completed_at": datetime.datetime.now() - datetime.timedelta(days=3)
-            },
-        ]
-    }
-    
-    sample_tasks = { "Tasks" : []}
-    
-    return JsonResponse(sample_tasks)
+    if request.method == "GET":
+        try:
+            tasks = TaskItem.objects.all()
+            
+            data = []
+            for task in tasks:
+                item  = {
+                    'id': task.id,
+                    'title': task.title,
+                    'description': task.description,
+                    'created_at': task.created_at.isoformat(),
+                }
+                data.append(item)
+            
+            return JsonResponse({"Tasks" : data}, safe=False)
+
+        except Exception as e:
+            return JsonResponse({'Error': str(e)}, status=500)
+    else:
+        return JsonResponse({'Error': 'Invalid Request'}, status=405)
 
 
+@csrf_exempt
 def create_task_view(request):
-    title = request.GET.get('title')
-    description = request.GET.get('description')
-    print(title, description)
-    task = TaskItem.objects.create(title=title, description=description)
-    response_data = {
-        'message': 'Task created successfully',
-        'task': {
-            'id': task.id,
-            'title': task.title,
-            'description': task.description,
-            'created_at': task.created_at,
-            #'completed_at': task.completed_at
-        }
-    }
-    return JsonResponse(response_data, status=200)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body) 
+            
+            title = data.get('title')
+            description = data.get('description', '')  # Provide a default empty string for description
+
+            # Create and save the TaskItem object
+            task = TaskItem(title=title, description=description)
+            task.save()
+
+            response_data = {
+                'message': 'Task created successfully!',
+                'task_id': task.id,
+                'title': task.title,
+                'description': task.description,
+                'created_at': task.created_at,
+            }
+
+            return JsonResponse(response_data, status=201)
+
+        except Exception as e:
+            return JsonResponse({'Error': str(e)}, status=500)
+    else:
+        return JsonResponse({'Error': 'Invalid Request'}, status=405)
 
 
-def delete_task_view(request):
-    task = get_object_or_404(TaskItem, id=id)
-    task.delete()
-    response_data = {
-            'message': 'Task deleted',
-    }
-    return JsonResponse(response_data, status=200)
+@csrf_exempt
+def delete_task_view(request, id):
+    if request.method == "DELETE":
+        try:
+            print("ID", id)
+            task = get_object_or_404(TaskItem, id=id)
+            task.delete()
+            response_data = {
+                    'message': 'Task deleted',
+            }
+            return JsonResponse(response_data, status=200)
+
+        except Exception as e:
+            return JsonResponse({'Error': str(e)}, status=500)
+    else:
+        return JsonResponse({'Error': 'Invalid Request'}, status=405)
 
 
 def project_tasks_list_view(request):
     
+    # Hardcoded tasks of what I needed to do for this assessment
     tasks = {
         "Project" : [
             {
                 "title" : "Create Backend for assessment",
                 "description" : "Create a backend server using Python Django with at least two api endpoints",
-                "created_at" : datetime.date.today(),
-                #"completed_at" : None
+                "created_at" : "2024-08-22"
             },            
             {
                 "title" : "Create Frontend for assessment",
                 "description" : "Create a frontend server using React.js that displays components",
-                "created_at" : datetime.date.today(),
-                #"completed_at" : None
+                "created_at" : "2024-08-22"
             },
             {
                 "title" : "Refresh Django",
                 "description" : "Review Django and learn how to setup backend app",
-                "created_at" : datetime.date.today(),
-                #"completed_at" : None
+                "created_at" : "2024-08-22"
             },            
             {
                 "title" : "Add proxy to backend server",
                 "description" : "",
-                "created_at" : datetime.date.today(),
-                #"completed_at" : None
+                "created_at" : "2024-08-22"
             },            
             {
                 "title" : "Create Model to store tasks",
                 "description" : "Using Django, setup a model of TaskItem that has the properties such as Title, description, date created, and date completed",
-                "created_at" : datetime.date.today(),
-                #"completed_at" : None
+                "created_at" : "2024-08-22"
             },
         ]
     }
