@@ -6,15 +6,32 @@ const CreateTask = () => {
     const [description, setDescription] = useState("");
     const [created, setCreated] = useState(false);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const request = await fetch(`api/tasks/create/?title=${title}&description=${description}`)
+
+        if(title.length > 50|| description.length > 100 || title.length < 3){
+            alert("Title or Description invalid length. Title must be atleast 3 chars in length and max 50 chars and Description max 100 characters long")
+            return;
+        }
+
+        const request = await fetch(`api/tasks/create/`, {
+            method: 'POST',  // Ensure the method is POST
+            headers: {
+              'Content-Type': 'application/json',  // Set Content-Type to application/json
+            },
+            body: JSON.stringify({
+                "title" : title,
+                "description" : description
+            }),  // Convert data to JSON string
+          })
 
         if (request.ok){
             setTitle("")
             setDescription("")
             setCreated(true)
+            setTimeout(() => {
+                setCreated(false)
+            }, 1000)
             const response = await request.json()
             console.log(response)
         }
